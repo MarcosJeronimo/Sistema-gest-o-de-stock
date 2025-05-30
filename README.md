@@ -1,4 +1,4 @@
-# Sistema-gest-o-de-stock
+# Sistema-gestao-de-stock
 Sistema de gestão de stock de armazém em python (em progresso)
 
 Resumo--
