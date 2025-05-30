@@ -90,7 +90,7 @@ def adicionar_linha():
     
     nova_linha = []
     
-    for coluna in df.columns():
+    for coluna in df.columns:
         dado = input(f"Introduza o valor a inserir na coluna {coluna}\n")
         nova_linha.append(dado)
         
@@ -127,16 +127,26 @@ def editar_valor():
     
     try:
         linha = int(input("Indique o indíce de linha do valor a editar: \n"))
-        nome_coluna = int(input("Indique o indíce da coluna do valor a editar: \n"))
+        
+        print("\nColunas disponíveis:")
+        for i, col in enumerate(df.columns):
+            print(f"{i} : {col}")
+        
+        indice_coluna = int(input("Indique o indíce da coluna do valor a editar: \n"))
         
         if linha not in df.index:
             print("Index não encontrado")
             return None
         
-        if nome_coluna not in df.index:
-            print(f"Erro! A coluna {nome_coluna}, não está registada")
+        if indice_coluna < 0 or indice_coluna > len(df.columns):
+            print(f"Erro! O indíce de coluna deve estar entre 0 e {len(df.columns) - 1}\n")
             return None
-        novo_dado = input(f"Introduza o novo dado para o indice {linha}, nas coluna {nome_coluna}: \n")
+        
+        nome_coluna = df.columns[indice_coluna]
+        
+        print(f"Valor atual da linha '{linha}', coluna '{nome_coluna}' : {df.at[linha, nome_coluna]}\n")
+        novo_dado = input(f"Introduza um novo valor para a linha '{linha}', coluna '{nome_coluna}'\n")
+        
         df.at[linha, nome_coluna] = novo_dado
         print("Dado actualizado com sucesso\n")
     except ValueError:
@@ -158,7 +168,7 @@ def importar_dataframe():
     global df
     
     try:
-        df = pd.read_excel(FILE_PATH, sheet_name= 'Stock')
+        df = pd.read_excel(FILE_PATH, sheet_name= 'Stock', index_col= 0)
         print(f"Stock importado com sucesso do ficheiro {FILE_PATH} \n")
     except FileNotFoundError:
         print(f"Erro! Ficheiro não encontrado\n")
@@ -223,7 +233,16 @@ def filtrar_valores():
         return None
     
     criterio = input(f"Indique o criterio a filtrar no {nome_coluna}\n")
-    filtro = df[df[nome_coluna == criterio]]
+    filtro = df[df[nome_coluna].str.strip() == criterio.strip()]
+    
+    if filtro.empty:
+        print(f"Nenhum dado encontrado na coluna '{nome_coluna}' que corresponda a '{criterio}'\n")
+        print(f"Valores disponíveis na coluna '{nome_coluna}':")
+        print(df[nome_coluna].unique())
+    else:
+        print(f"Dados que correspondem a '{criterio}' na coluna '{nome_coluna}':\n")
+        print(filtro)
+    print()
     
     print(f"Dados na coluna - {nome_coluna} que correspondem a - {criterio}: \n")
     print(filtro[nome_coluna])
