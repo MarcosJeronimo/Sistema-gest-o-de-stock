@@ -14,9 +14,13 @@ def criar_dataframe():
         num_colunas = int(input("Indicar o nº de colunas a adicionar ao stock do armazém: \n"))
         data = {}
         num_linhas = None
+       
+       
         
         for i in range(num_colunas):
             nome_coluna = input(f"Qual nome quer dar à coluna {i + 1}: \n")
+            
+         
             
             if nome_coluna in data:
                 print(f"Nome da coluna - {nome_coluna} já existe no stock de armazém")
@@ -24,13 +28,13 @@ def criar_dataframe():
             
             dados = input(f"Introduza os dados a registar na coluna - {nome_coluna} separados por vírgula ','\n").split(',')
             
-        if num_linhas == None:
-            num_linhas = len(dados)
-        elif len(dados) != num_linhas:
-            print(f"Dados inválidos, nº de dados nas colunas deve ser igual a {num_linhas} ")
-            return None
-    
-        data[nome_coluna] = dados
+            if num_linhas == None:
+                num_linhas = len(dados)
+            elif len(dados) != num_linhas:
+                print(f"Dados inválidos, nº de dados nas colunas deve ser igual a {num_linhas} ")
+                return None
+        
+            data[nome_coluna] = dados
         print("Colunas e respetivos dados adicionados ao stock com sucesso\n")
         print()
     
@@ -76,6 +80,68 @@ def adicionar_coluna():
     print(f"Coluna '{nome_coluna}' adicionada com sucesso\n")
     print()
     
+def adicionar_linha():
+    global df
+    if df.empty:
+        print("O Data frame está vazio")
+        return
+    
+    print("\nColunas do Data Frame: ",", ".join(df.columns))
+    
+    nova_linha = []
+    
+    for coluna in df.columns():
+        dado = input(f"Introduza o valor a inserir na coluna {coluna}\n")
+        nova_linha.append(dado)
+        
+    df.loc[len(df)] = nova_linha  # Commando para fazer "append" (dataframe não tem append) ao novo valor e actualizar as rows
+    print("Linha adicionada com sucesso!\n")
+    print(df)
+    print()
+    
+def remover_linha():
+    global df
+    if df.empty:
+        print("O Data frame está vazio")
+        return
+    consultar_dataframe()
+    
+    try:
+        linha = int(input("Indique o índice de linha a remover: \n"))
+        if linha not in df.index:
+            print("Index não encontrado")
+            return None
+        else:
+            df = df.drop(index= linha)
+            print(f"Linha nº{linha} removida com sucesso!\n")
+    except ValueError:
+        print("Erro! O valor do indice deve ser um nº inteiro\n")
+        
+    
+def editar_valor():
+    global df
+    if df.empty:
+        print("O Data frame está vazio")
+        return
+    consultar_dataframe()
+    
+    try:
+        linha = int(input("Indique o indíce de linha do valor a editar: \n"))
+        nome_coluna = int(input("Indique o indíce da coluna do valor a editar: \n"))
+        
+        if linha not in df.index:
+            print("Index não encontrado")
+            return None
+        
+        if nome_coluna not in df.index:
+            print(f"Erro! A coluna {nome_coluna}, não está registada")
+            return None
+        novo_dado = input(f"Introduza o novo dado para o indice {linha}, nas coluna {nome_coluna}: \n")
+        df.at[linha, nome_coluna] = novo_dado
+        print("Dado actualizado com sucesso\n")
+    except ValueError:
+        print("Erro! O valor do indice deve ser um nº inteiro\n")
+
 def guardar_dataframe():
     global df
     if df.empty:
@@ -175,9 +241,12 @@ while True:
     print("4 Eliminar coluna")
     print("5 Renomear coluna")
     print("6 Filtrar dados no stock")
-    print("7 Guardar stock em excel")
-    print("8 Importar stock de excel")
-    print("9 Sair \n")
+    print("7 Adicionar linha ao stock")
+    print("8 Remover linha do stock")
+    print("9 Editar valor na dataframe")
+    print("10 Guardar stock em excel")
+    print("11 Importar stock de excel")
+    print("12 Sair \n")
     
     escolha = input("Indique a opção a executar: \n")
     
@@ -194,10 +263,16 @@ while True:
     elif escolha == "6":
         filtrar_valores()
     elif escolha == "7":
-        guardar_dataframe()
+        adicionar_linha()
     elif escolha == "8":
-        importar_dataframe()
+        remover_linha()
     elif escolha == "9":
+        editar_valor()
+    elif escolha == "10":
+        guardar_dataframe()
+    elif escolha == "11":
+        importar_dataframe()
+    elif escolha == "12":
         print("Obrigado \n")
         break
     else:
