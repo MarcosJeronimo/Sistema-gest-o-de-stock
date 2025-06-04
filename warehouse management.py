@@ -403,7 +403,7 @@ def estatisticas():
     elif escolha == "4":
         print(f"O maior valor encontrado na coluna - {coluna} é: {df[coluna].max()}\n")
     elif escolha == "5":
-        print(f"A mediana dos valores da coluna -  {coluna} é: {df[coluna].media()}\n")
+        print(f"A mediana dos valores da coluna -  {coluna} é: {df[coluna].median()}\n")
     else:
         print("Erro! Opção inválida")
             
@@ -421,9 +421,10 @@ while True:
     print("7 Adicionar linha ao stock")
     print("8 Remover linha do stock")
     print("9 Editar valor na dataframe")
-    print("10 Guardar stock em excel")
-    print("11 Importar stock de excel")
-    print("12 Sair \n")
+    print("10 Cálculos estatísticos")
+    print("11 Guardar stock em excel")
+    print("12 Importar stock de excel")
+    print("13 Sair \n")
     
     escolha = input("Indique a opção a executar: \n")
     
@@ -446,10 +447,12 @@ while True:
     elif escolha == "9":
         editar_valor()
     elif escolha == "10":
-        guardar_dataframe()
+        estatisticas()
     elif escolha == "11":
-        importar_dataframe()
+        guardar_dataframe()
     elif escolha == "12":
+        importar_dataframe()
+    elif escolha == "13":
         print("Obrigado \n")
         break
     else:
