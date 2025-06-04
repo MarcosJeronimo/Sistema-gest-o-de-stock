@@ -14,3 +14,4 @@ Funcionalidades--
 - Interativo
 - Permite edição
 - Import/export
+- Adicionar/eliminar colunas e/ou linhas
